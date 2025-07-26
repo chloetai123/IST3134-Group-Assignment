@@ -2,9 +2,10 @@ import pandas as pd
 import os
 
 # === CONFIGURATION ===
-result_folder = "/Users/alloy/Documents/Learning/Y3S1/IST3134 Big Data Analytics in the cloud/assignment"
+result_folder = os.path.dirname(os.path.abspath(__file__))
 raw_data_path = os.path.join(result_folder, "dataset.csv")
 result_files = ["part-00000", "part-00001", "part-00002"]
+
 
 # === Load Raw CSV for Game Names ===
 raw_df = pd.read_csv(raw_data_path, usecols=["app_id", "app_name"]).drop_duplicates()
