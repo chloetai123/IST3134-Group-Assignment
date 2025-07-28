@@ -10,7 +10,7 @@ This task analyzes user sentiment on Steam game reviews using Hadoop MapReduce (
   - The game with the **highest number of positive reviews**
   - The game with the **highest number of negative reviews**
 
-> All MapReduce jobs are executed on **AWS EMR** using a **custom JAR step**. Final results are processed using a local Python script (`q1.py`).
+> All MapReduce jobs are executed on **AWS EMR** using a **Streaming Program**. Final results are processed using a local Python script (`q1.py`).
 
 ---
 ## 📁 Folder Structure
@@ -60,22 +60,7 @@ In the AWS EMR Console:
 ### ✅ Step 3: Add EMR Step (JAR)
 
 1. Go to **Steps > Add Step**
-2. **Step Type:** `Custom JAR`
-3. **JAR Location:**
-
-```
-command-runner.jar
-```
-
-4. **Arguments:**
-
-```
-hadoop-streaming -files s3://assign-bd/scripts/mapper_q1.py,s3://assign-bd/scripts/reducer_q1.py -mapper python3 mapper_q1.py -reducer python3 reducer_q1.py -input s3://assign-bd/input/steamdata -output s3://assign-bd/output/q1
-```
-
-Wait for the EMR step to finish. Results will be saved in the `output/` folder.
-
----
+2. **Step Type:** `Streaming program`
 
 ## 🧪 How to Analyze Results Locally
 
