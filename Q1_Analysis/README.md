@@ -2,7 +2,7 @@
 
 ## 📌 Problem Statement
 
-This task analyzes user sentiment on Steam game reviews using Hadoop MapReduce (JAR executed in AWS EMR). The objectives are:
+This task analyzes user sentiment on Steam game reviews using Hadoop MapReduce (executed in AWS EMR). The objectives are:
 
 - Count the number of **positive** and **negative** reviews per game.
 - Compute the **positive review ratio** for each game.
