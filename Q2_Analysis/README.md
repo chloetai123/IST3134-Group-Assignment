@@ -11,6 +11,8 @@ bigdata/
 │   └── main/
 │       └── java/
 │           └── wordcount/
+│               ├── NegativeWordMapper.java
+│               ├── NegativeWordReducer.java
 │               ├── Score.java
 │               ├── WordCountDriver.java
 │               ├── WordCountMapper.java
@@ -23,30 +25,35 @@ bigdata/
 3. `WordCountDriver.java` - Main program
 4. `WordCountMapper.java` - Mapper
 5. `WordCountReducer.java` - Reducer
+6. `NegativeWordMapper.java` - Mapper to generate top negative words
+7. `NegativeWordMapper.java` - Reducer to generate top negative words
 
 ## Setup Instructions
 
 ### Prerequisites
-- Java 17 or higher
+- Java 8 or higher
 - Gradle 8.4.3 or higher
 - Hadoop 3.4.1 or higher
 
 ### 1. Clone the GitHub Repository
 ```bash
-git clone https://github.com/chloetai/bigdata.git
-cd bigdata
+git clone https://github.com/chloetai123/IST3134-Group-Assignment.git
+cd IST3134-Group-Assignment
+git checkout q2
+cd Q2_Analysis
 ```
 
 ### 2. Create Hadoop File System
 ```bash
-hadoop fs -mkdir -p hdfs/input/q2
+hadoop fs -mkdir -p /input/q2
+hadoop fs -mkdir -p /output/q2
 ```
 
 ### 3. Add the Data Files
 
-Copy the Steam Review dataset to `hdfs/input/q2`:
+Copy the Steam Review dataset to `/input/q2`:
 ```bash
-hadoop fs -put dataset.csv hdfs/input/q2
+hadoop fs -put /path/to/dataset.csv /input/q2/dataset.csv
 ```
 
 ### 4. Build the Project
@@ -54,31 +61,13 @@ hadoop fs -put dataset.csv hdfs/input/q2
 ./gradlew build
 ```
 
-### 5. Create the Executable JAR
-```bash
-./gradlew shadowJar
-```
-
-This creates an executable JAR file at: `build/libs/sentiment-analyzer.jar`
-
 ## Running the Application
 
-### Option 1: Run with Gradle
 ```bash
-./gradlew runWithSample
+hadoop jar build/libs/sentiment-analyzer.jar /input/q2/dataset.csv /output/q2 10
 ```
 
-### Option 2: Run the JAR directly
-```bash
-java -jar build/libs/sentiment-analyzer.jar hdfs/input/q2 hdfs/output_q2
-```
-
-### Option 3: Run with Hadoop
-```bash
-hadoop jar build/libs/sentiment-analyzer.jar hdfs/input/q2 hdfs/output_q2
-```
-
-## Input Data Format
+## Input Data Format (Comma-delimited)
 
 The application accepts Steam Review dataset, which is a comma-separated file.
 The columns are:
@@ -90,19 +79,33 @@ The columns are:
 * review_votes - the number of votes that agree with the review
 
 
-## Output Example
+## Output Example (Tab-delimited)
 
 ```
-best	1	1
-forever	1	1
-game	1	1
-hype	-1	1
-life	1	0
-money	-1	0
-ruined	0	1
-waste	-1	0
-weekend	-1	1
+-24374	waste
+-21350	terrible
+-21312	worst
+-20282	refund
+-15981	unplayable
+-14006	horrible
+-13547	boring
+-11307	awful
+-11149	garbage
+-9110	broken
 ```
+
+## Jobs
+
+### Word Count
+
+* Input: CSV file
+* Output: word,score,vote (intermediate, tab-delimited format)
+
+### Negative Word
+
+* Input: word,score,vote (intermediate file)
+* Output: score,word (tab-delimited format)
+
 
 ## Dependencies
 
