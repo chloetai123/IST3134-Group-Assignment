@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Stanford CoreNLP for sentiment analysis
+    // implementation 'edu.stanford.nlp:stanford-corenlp:4.5.1'
+    // implementation 'edu.stanford.nlp:stanford-corenlp:4.5.1:models'
+
+    implementation 'org.apache.hadoop:hadoop-common:3.4.1'
+    implementation 'org.apache.hadoop:hadoop-hdfs:3.4.1'
+    implementation 'org.apache.hadoop:hadoop-mapreduce-client-core:3.4.1'
+
+    implementation 'com.opencsv:opencsv:5.10'
+    
+    // JSON processing for review data
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    
+    // Apache Commons for text processing utilities
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    
+    // Logging
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'ch.qos.logback:logback-classic:1.2.12'
+    
+    implementation 'org.apache.spark:spark-core_2.12:3.5.1'
+    implementation 'org.apache.spark:spark-sql_2.12:3.5.1'
+
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+}
+
+application {
+    // mainClass = 'com.example.sentiment.SentimentAnalysisApp'
+    mainClass = 'wordcount.WordCountDriver'
+    applicationDefaultJvmArgs = [ '-D--add-exports=java.base/sun.nio.ch=ALL-UNNAMED' ]
+}
+
+// Configure the shadow plugin to create executable jar
+shadowJar {
+    archiveBaseName = 'sentiment-analyzer'
+    archiveClassifier = ''
+    archiveVersion = ''
+    zip64 = true
+    
+    // Exclude duplicate files that can cause issues
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    
+    manifest {
+        attributes 'Main-Class': 'com.example.sentiment.SentimentAnalysisApp'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Task to run the application with sample data
+task runWithSample(type: JavaExec) {
+    // mainClass.set('com.example.sentiment.SentimentAnalysisApp')
+    mainClass.set('wordcount.WordCountDriver')
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['hdfs/input/q2a', 'hdfs/output_q2']
+}
