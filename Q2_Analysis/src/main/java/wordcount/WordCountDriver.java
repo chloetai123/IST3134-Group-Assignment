@@ -78,6 +78,9 @@ public class WordCountDriver {
         negativeWordJob.setOutputKeyClass(IntWritable.class);
         negativeWordJob.setOutputValueClass(Text.class);
 
+        // Write output to 1 file
+        negativeWordJob.setNumReduceTasks(1);
+
         Path outputPath = new Path(args[1]);
         fs = outputPath.getFileSystem(conf);
         if (fs.exists(outputPath)) {
