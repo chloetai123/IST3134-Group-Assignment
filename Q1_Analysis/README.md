@@ -88,6 +88,3 @@ python q1.py
 - Game with highest negative review count
 
 ---
-
-## ⚠️ Notes
-dataset.csv is not included in this repo due to its size (>2GB). Please place it manually in the same directory to run q1.py.
